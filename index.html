@@ -12,7 +12,6 @@
 
     :root {
       --gold: #c9a227;
-      --gold-light: #e2b93b;
       --bg: #0a0a0a;
       --bg2: #111111;
       --bg3: #1a1a1a;
@@ -61,6 +60,7 @@
 
     /* CONTENT */
     .content { padding: 20px 16px 60px; }
+
     .treino-header { margin-bottom: 16px; }
     .treino-title { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
     .treino-title span { color: var(--gold); }
@@ -90,44 +90,35 @@
       border-radius: 16px;
       margin-bottom: 10px;
       overflow: hidden;
-      transition: border-color 0.15s;
+      transition: border-color 0.2s;
     }
     .ex-card.feito { border-color: rgba(76,175,80,0.35); background: rgba(76,175,80,0.04); }
 
-    /* LINHA PRINCIPAL */
+    /* LINHA PRINCIPAL — clicável para marcar */
     .ex-row {
-      display: flex;
-      align-items: stretch;
-      cursor: pointer;
+      display: flex; align-items: stretch; cursor: pointer;
     }
 
     /* GIF */
     .ex-gif {
-      width: 90px; min-height: 90px;
-      flex-shrink: 0;
+      width: 86px; min-height: 86px; flex-shrink: 0;
       background: var(--bg3);
       display: flex; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
     }
-    .ex-gif img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-    }
-    .ex-gif .emoji-fallback {
-      font-size: 2rem;
-    }
-    .ex-gif .shimmer {
+    .ex-gif img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ex-gif .emoji-fb { font-size: 2rem; }
+    .shimmer {
       position: absolute; inset: 0;
       background: linear-gradient(90deg, var(--bg3) 25%, #1f1f1f 50%, var(--bg3) 75%);
       background-size: 200% 100%;
-      animation: shimmer 1.2s infinite;
+      animation: sh 1.2s infinite;
     }
-    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    @keyframes sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
     /* INFO */
     .ex-info { flex: 1; padding: 14px 12px; display: flex; flex-direction: column; justify-content: center; }
-    .ex-nome {
-      font-size: 0.92rem; font-weight: 700; margin-bottom: 4px; line-height: 1.3;
-    }
+    .ex-nome { font-size: 0.93rem; font-weight: 700; margin-bottom: 4px; line-height: 1.3; }
     .ex-card.feito .ex-nome { text-decoration: line-through; opacity: 0.4; }
     .ex-detalhe { font-size: 0.76rem; color: var(--text2); }
     .ex-card.feito .ex-detalhe { opacity: 0.4; }
@@ -140,25 +131,41 @@
     }
     .ex-card.feito .ex-check { color: var(--green); }
 
-    /* BOTÃO VER TUTORIAL */
-    .ex-tutorial {
-      display: flex; align-items: center; gap: 8px;
-      padding: 9px 14px;
+    /* BOTÃO VER VÍDEO */
+    .ex-ver-btn {
+      width: 100%; padding: 9px 14px;
       border-top: 1px solid var(--border);
       background: transparent;
       color: var(--text2);
       font-size: 0.78rem; font-weight: 600;
       cursor: pointer;
-      text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      border: none; border-top: 1px solid var(--border);
       transition: background 0.15s, color 0.15s;
+      text-align: left;
     }
-    .ex-tutorial:hover { background: rgba(255,255,255,0.04); color: var(--text); }
-    .ex-tutorial .yt-icon {
+    .ex-ver-btn:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+    .ex-ver-btn .yt-dot {
       width: 18px; height: 18px; border-radius: 4px;
       background: var(--red);
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      font-size: 0.6rem; color: #fff;
+      flex-shrink: 0; font-size: 0.55rem; color: #fff;
+    }
+    .ex-ver-btn .arrow { margin-left: auto; font-size: 0.7rem; transition: transform 0.2s; }
+    .ex-ver-btn.aberto .arrow { transform: rotate(180deg); }
+
+    /* VÍDEO EMBED */
+    .ex-video-wrap {
+      display: none;
+      border-top: 1px solid var(--border);
+      background: #000;
+    }
+    .ex-video-wrap.aberto { display: block; }
+    .ex-video-wrap iframe {
+      width: 100%;
+      height: 200px;
+      display: block;
+      border: none;
     }
 
     /* DESCANSO */
@@ -200,14 +207,14 @@ const TREINOS = {
     titulo: 'Peito', sub: 'Tríceps como auxiliar',
     grupos: [
       { nome: 'Peito', exercicios: [
-        { nome: 'Supino Reto com Barra',        detalhe: '4 séries × 8–12 reps',  api: 'barbell bench press',     yt: 'supino reto com barra como fazer',     emoji: '🏋️' },
-        { nome: 'Supino Inclinado Halteres',     detalhe: '3 séries × 10–12 reps', api: 'incline dumbbell press',  yt: 'supino inclinado halteres como fazer', emoji: '💪' },
-        { nome: 'Crucifixo com Halteres',        detalhe: '3 séries × 12–15 reps', api: 'dumbbell fly',            yt: 'crucifixo halteres como fazer',        emoji: '🦅' },
-        { nome: 'Crossover no Cabo',             detalhe: '3 séries × 12–15 reps', api: 'cable crossover',         yt: 'crossover polia como fazer',           emoji: '🔀' },
+        { nome: 'Supino Reto com Barra',       detalhe: '4 séries × 8–12 reps',  api: 'barbell bench press',     yt: 'supino reto com barra execução correta',     emoji: '🏋️' },
+        { nome: 'Supino Inclinado Halteres',    detalhe: '3 séries × 10–12 reps', api: 'incline dumbbell press',  yt: 'supino inclinado halteres execução correta', emoji: '💪' },
+        { nome: 'Crucifixo com Halteres',       detalhe: '3 séries × 12–15 reps', api: 'dumbbell fly',            yt: 'crucifixo halteres execução correta',        emoji: '🦅' },
+        { nome: 'Crossover no Cabo',            detalhe: '3 séries × 12–15 reps', api: 'cable crossover',         yt: 'crossover polia execução correta',           emoji: '🔀' },
       ]},
       { nome: 'Tríceps', exercicios: [
-        { nome: 'Tríceps Pulley (corda)',         detalhe: '4 séries × 10–12 reps', api: 'triceps pushdown',        yt: 'triceps pulley corda como fazer',      emoji: '⬇️' },
-        { nome: 'Tríceps Francês',               detalhe: '3 séries × 10–12 reps', api: 'skull crusher',           yt: 'triceps frances como fazer',           emoji: '💀' },
+        { nome: 'Tríceps Pulley (corda)',        detalhe: '4 séries × 10–12 reps', api: 'triceps pushdown',        yt: 'triceps pulley corda execução correta',      emoji: '⬇️' },
+        { nome: 'Tríceps Francês',              detalhe: '3 séries × 10–12 reps', api: 'skull crusher',           yt: 'triceps frances execução correta',           emoji: '💀' },
       ]},
     ]
   },
@@ -215,14 +222,14 @@ const TREINOS = {
     titulo: 'Costas', sub: 'Bíceps como auxiliar',
     grupos: [
       { nome: 'Costas', exercicios: [
-        { nome: 'Puxada na Frente',              detalhe: '4 séries × 8–12 reps',  api: 'lat pulldown',            yt: 'puxada frente barra como fazer',       emoji: '🔽' },
-        { nome: 'Remada Curvada com Barra',       detalhe: '4 séries × 8–12 reps',  api: 'barbell bent over row',   yt: 'remada curvada barra como fazer',      emoji: '🏋️' },
-        { nome: 'Remada Unilateral',              detalhe: '3 séries × 10–12 reps', api: 'one arm dumbbell row',    yt: 'remada unilateral haltere como fazer', emoji: '💪' },
-        { nome: 'Pullover com Halter',            detalhe: '3 séries × 12 reps',    api: 'dumbbell pullover',       yt: 'pullover halter como fazer',           emoji: '🌊' },
+        { nome: 'Puxada na Frente',             detalhe: '4 séries × 8–12 reps',  api: 'lat pulldown',            yt: 'puxada frente execução correta',             emoji: '🔽' },
+        { nome: 'Remada Curvada com Barra',      detalhe: '4 séries × 8–12 reps',  api: 'barbell bent over row',   yt: 'remada curvada barra execução correta',      emoji: '🏋️' },
+        { nome: 'Remada Unilateral',             detalhe: '3 séries × 10–12 reps', api: 'one arm dumbbell row',    yt: 'remada unilateral haltere execução correta', emoji: '💪' },
+        { nome: 'Pullover com Halter',           detalhe: '3 séries × 12 reps',    api: 'dumbbell pullover',       yt: 'pullover halter execução correta',           emoji: '🌊' },
       ]},
       { nome: 'Bíceps', exercicios: [
-        { nome: 'Rosca Direta com Barra',         detalhe: '4 séries × 10–12 reps', api: 'barbell curl',            yt: 'rosca direta barra como fazer',        emoji: '💪' },
-        { nome: 'Rosca Martelo',                 detalhe: '3 séries × 10–12 reps', api: 'hammer curl',             yt: 'rosca martelo como fazer',             emoji: '🔨' },
+        { nome: 'Rosca Direta com Barra',        detalhe: '4 séries × 10–12 reps', api: 'barbell curl',            yt: 'rosca direta barra execução correta',        emoji: '💪' },
+        { nome: 'Rosca Martelo',                detalhe: '3 séries × 10–12 reps', api: 'hammer curl',             yt: 'rosca martelo execução correta',             emoji: '🔨' },
       ]},
     ]
   },
@@ -230,14 +237,14 @@ const TREINOS = {
     titulo: 'Pernas', sub: 'Quadríceps, posterior e panturrilha',
     grupos: [
       { nome: 'Quadríceps', exercicios: [
-        { nome: 'Agachamento Livre',             detalhe: '4 séries × 8–12 reps',  api: 'barbell squat',           yt: 'agachamento livre como fazer',         emoji: '🦵' },
-        { nome: 'Leg Press 45°',                 detalhe: '4 séries × 10–12 reps', api: 'leg press',               yt: 'leg press 45 como fazer',              emoji: '🦵' },
-        { nome: 'Cadeira Extensora',             detalhe: '3 séries × 12–15 reps', api: 'leg extension',           yt: 'cadeira extensora como fazer',         emoji: '🦵' },
+        { nome: 'Agachamento Livre',            detalhe: '4 séries × 8–12 reps',  api: 'barbell squat',           yt: 'agachamento livre execução correta',         emoji: '🦵' },
+        { nome: 'Leg Press 45°',                detalhe: '4 séries × 10–12 reps', api: 'leg press',               yt: 'leg press 45 execução correta',              emoji: '🦵' },
+        { nome: 'Cadeira Extensora',            detalhe: '3 séries × 12–15 reps', api: 'leg extension',           yt: 'cadeira extensora execução correta',         emoji: '🦵' },
       ]},
       { nome: 'Posterior + Panturrilha', exercicios: [
-        { nome: 'Mesa Flexora',                  detalhe: '3 séries × 12–15 reps', api: 'lying leg curl',          yt: 'mesa flexora como fazer',              emoji: '🦵' },
-        { nome: 'Stiff com Halteres',            detalhe: '3 séries × 10–12 reps', api: 'romanian deadlift',       yt: 'stiff halteres como fazer',            emoji: '🏋️' },
-        { nome: 'Panturrilha em Pé',             detalhe: '4 séries × 15–20 reps', api: 'standing calf raise',     yt: 'panturrilha em pe como fazer',         emoji: '🦶' },
+        { nome: 'Mesa Flexora',                 detalhe: '3 séries × 12–15 reps', api: 'lying leg curl',          yt: 'mesa flexora execução correta',              emoji: '🦵' },
+        { nome: 'Stiff com Halteres',           detalhe: '3 séries × 10–12 reps', api: 'romanian deadlift',       yt: 'stiff halteres execução correta',            emoji: '🏋️' },
+        { nome: 'Panturrilha em Pé',            detalhe: '4 séries × 15–20 reps', api: 'standing calf raise',     yt: 'panturrilha em pe execução correta',         emoji: '🦶' },
       ]},
     ]
   },
@@ -245,14 +252,14 @@ const TREINOS = {
     titulo: 'Ombros', sub: 'Trapézio como auxiliar',
     grupos: [
       { nome: 'Ombros', exercicios: [
-        { nome: 'Desenvolvimento Halteres',      detalhe: '4 séries × 10–12 reps', api: 'dumbbell shoulder press', yt: 'desenvolvimento halteres ombro',       emoji: '🔝' },
-        { nome: 'Elevação Lateral',              detalhe: '4 séries × 12–15 reps', api: 'lateral raise',           yt: 'elevacao lateral como fazer',          emoji: '↔️' },
-        { nome: 'Elevação Frontal',              detalhe: '3 séries × 12 reps',    api: 'front raise',             yt: 'elevacao frontal como fazer',          emoji: '⬆️' },
-        { nome: 'Voador Invertido',              detalhe: '3 séries × 12–15 reps', api: 'reverse fly',             yt: 'voador invertido posterior como fazer', emoji: '🦅' },
+        { nome: 'Desenvolvimento Halteres',     detalhe: '4 séries × 10–12 reps', api: 'dumbbell shoulder press', yt: 'desenvolvimento halteres ombro execução',    emoji: '🔝' },
+        { nome: 'Elevação Lateral',             detalhe: '4 séries × 12–15 reps', api: 'lateral raise',           yt: 'elevacao lateral execução correta',          emoji: '↔️' },
+        { nome: 'Elevação Frontal',             detalhe: '3 séries × 12 reps',    api: 'front raise',             yt: 'elevacao frontal execução correta',          emoji: '⬆️' },
+        { nome: 'Voador Invertido',             detalhe: '3 séries × 12–15 reps', api: 'reverse fly',             yt: 'voador invertido posterior execução',        emoji: '🦅' },
       ]},
       { nome: 'Trapézio', exercicios: [
-        { nome: 'Encolhimento com Halteres',     detalhe: '3 séries × 12–15 reps', api: 'dumbbell shrug',          yt: 'encolhimento halteres como fazer',     emoji: '🤷' },
-        { nome: 'Remada Alta',                   detalhe: '3 séries × 12 reps',    api: 'upright row',             yt: 'remada alta como fazer',               emoji: '⬆️' },
+        { nome: 'Encolhimento com Halteres',    detalhe: '3 séries × 12–15 reps', api: 'dumbbell shrug',          yt: 'encolhimento halteres execução correta',     emoji: '🤷' },
+        { nome: 'Remada Alta',                  detalhe: '3 séries × 12 reps',    api: 'upright row',             yt: 'remada alta execução correta',               emoji: '⬆️' },
       ]},
     ]
   },
@@ -260,17 +267,17 @@ const TREINOS = {
     titulo: 'Braços + Abdômen', sub: 'Bíceps, tríceps e core',
     grupos: [
       { nome: 'Bíceps', exercicios: [
-        { nome: 'Rosca Scott',                   detalhe: '4 séries × 10–12 reps', api: 'preacher curl',           yt: 'rosca scott como fazer',               emoji: '💪' },
-        { nome: 'Rosca Concentrada',             detalhe: '3 séries × 12 reps',    api: 'concentration curl',      yt: 'rosca concentrada como fazer',         emoji: '💪' },
+        { nome: 'Rosca Scott',                  detalhe: '4 séries × 10–12 reps', api: 'preacher curl',           yt: 'rosca scott execução correta',               emoji: '💪' },
+        { nome: 'Rosca Concentrada',            detalhe: '3 séries × 12 reps',    api: 'concentration curl',      yt: 'rosca concentrada execução correta',         emoji: '💪' },
       ]},
       { nome: 'Tríceps', exercicios: [
-        { nome: 'Tríceps Testa',                 detalhe: '4 séries × 10–12 reps', api: 'skull crusher',           yt: 'triceps testa como fazer',             emoji: '💀' },
-        { nome: 'Mergulho entre Bancos',         detalhe: '3 séries × 12–15 reps', api: 'tricep dip',              yt: 'mergulho banco triceps como fazer',    emoji: '⬇️' },
+        { nome: 'Tríceps Testa',                detalhe: '4 séries × 10–12 reps', api: 'skull crusher',           yt: 'triceps testa execução correta',             emoji: '💀' },
+        { nome: 'Mergulho entre Bancos',        detalhe: '3 séries × 12–15 reps', api: 'tricep dip',              yt: 'mergulho banco triceps execução correta',    emoji: '⬇️' },
       ]},
       { nome: 'Abdômen', exercicios: [
-        { nome: 'Abdominal Crunch',              detalhe: '3 séries × 20 reps',    api: 'crunch',                  yt: 'abdominal crunch como fazer',          emoji: '⚡' },
-        { nome: 'Prancha',                       detalhe: '3 séries × 30–45s',     api: 'plank',                   yt: 'prancha abdominal como fazer',         emoji: '🧱' },
-        { nome: 'Elevação de Pernas',            detalhe: '3 séries × 15 reps',    api: 'leg raise',               yt: 'elevacao de pernas abdominal como fazer', emoji: '🦵' },
+        { nome: 'Abdominal Crunch',             detalhe: '3 séries × 20 reps',    api: 'crunch',                  yt: 'abdominal crunch execução correta',          emoji: '⚡' },
+        { nome: 'Prancha',                      detalhe: '3 séries × 30–45s',     api: 'plank',                   yt: 'prancha abdominal execução correta',         emoji: '🧱' },
+        { nome: 'Elevação de Pernas',           detalhe: '3 séries × 15 reps',    api: 'leg raise',               yt: 'elevacao de pernas abdominal execução',     emoji: '🦵' },
       ]},
     ]
   },
@@ -278,9 +285,8 @@ const TREINOS = {
   'Domingo': null,
 };
 
-// Cache
+// Cache GIFs
 const gifCache = JSON.parse(localStorage.getItem('gifCache') || '{}');
-
 async function getGif(apiName) {
   if (gifCache[apiName] !== undefined) return gifCache[apiName];
   try {
@@ -308,7 +314,7 @@ let diaAtivo = hojeNome;
 const tabsEl = document.getElementById('tabs');
 DIAS.forEach(dia => {
   const btn = document.createElement('button');
-  btn.className = 'tab' + (dia===hojeNome?' hoje-tab':'') + (dia===diaAtivo?' active':'');
+  btn.className = 'tab'+(dia===hojeNome?' hoje-tab':'')+(dia===diaAtivo?' active':'');
   btn.textContent = dia;
   btn.onclick = () => { diaAtivo=dia; renderTabs(); renderContent(); };
   tabsEl.appendChild(btn);
@@ -316,22 +322,62 @@ DIAS.forEach(dia => {
 
 function renderTabs() {
   tabsEl.querySelectorAll('.tab').forEach((b,i) => {
-    b.className = 'tab'+(DIAS[i]===hojeNome?' hoje-tab':'')+(DIAS[i]===diaAtivo?' active':'');
+    b.className='tab'+(DIAS[i]===hojeNome?' hoje-tab':'')+(DIAS[i]===diaAtivo?' active':'');
   });
 }
 
 function getChecks(dia) { return JSON.parse(localStorage.getItem('checks_'+dia)||'{}'); }
+
 function toggleEx(idx) {
   const c = getChecks(diaAtivo);
   c[idx] = !c[idx];
   localStorage.setItem('checks_'+diaAtivo, JSON.stringify(c));
-  renderContent();
+  // Só atualiza o card específico sem re-renderizar tudo
+  const card = document.querySelector(`[data-idx="${idx}"]`);
+  if (card) {
+    card.classList.toggle('feito', !!c[idx]);
+    card.querySelector('.ex-check').textContent = c[idx] ? '✓' : '○';
+    card.querySelector('.ex-nome').style.textDecoration = c[idx] ? 'line-through' : '';
+    card.querySelector('.ex-nome').style.opacity = c[idx] ? '0.4' : '';
+    card.querySelector('.ex-detalhe').style.opacity = c[idx] ? '0.4' : '';
+  }
+  // Atualiza barra de progresso
+  const treino = TREINOS[diaAtivo];
+  const allEx = treino.grupos.flatMap(g => g.exercicios);
+  const checks = getChecks(diaAtivo);
+  const feitos = allEx.filter((_,i) => checks[i]).length;
+  const pct = Math.round((feitos/allEx.length)*100);
+  const fill = document.querySelector('.progresso-fill');
+  const num = document.querySelector('.progresso-num');
+  if (fill) fill.style.width = pct+'%';
+  if (num) num.textContent = feitos+'/'+allEx.length;
 }
-function resetDia() { localStorage.removeItem('checks_'+diaAtivo); renderContent(); }
 
-function ytUrl(query) {
-  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(query);
+function toggleVideo(idx) {
+  const btn = document.querySelector(`[data-vid-btn="${idx}"]`);
+  const wrap = document.querySelector(`[data-vid-wrap="${idx}"]`);
+  if (!btn || !wrap) return;
+  const aberto = wrap.classList.toggle('aberto');
+  btn.classList.toggle('aberto', aberto);
+  // Lazy load do iframe
+  if (aberto && !wrap.querySelector('iframe')) {
+    const ex = getExByIdx(idx);
+    if (ex) {
+      const query = encodeURIComponent(ex.yt);
+      wrap.innerHTML = `<iframe src="https://www.youtube.com/embed?listType=search&list=${query}&index=0&hl=pt-BR&cc_lang_pref=pt" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+    }
+  } else if (!aberto) {
+    wrap.innerHTML = '';
+  }
 }
+
+function getExByIdx(idx) {
+  const treino = TREINOS[diaAtivo];
+  if (!treino) return null;
+  return treino.grupos.flatMap(g => g.exercicios)[idx] || null;
+}
+
+function resetDia() { localStorage.removeItem('checks_'+diaAtivo); renderContent(); }
 
 async function renderContent() {
   const el = document.getElementById('content');
@@ -347,11 +393,10 @@ async function renderContent() {
     return;
   }
 
-  // Busca GIFs em paralelo
-  const allEx = treino.grupos.flatMap(g => g.exercicios);
-  await Promise.all(allEx.map(ex => getGif(ex.api)));
+  await Promise.all(treino.grupos.flatMap(g => g.exercicios).map(ex => getGif(ex.api)));
 
   const checks = getChecks(diaAtivo);
+  const allEx = treino.grupos.flatMap(g => g.exercicios);
   const feitos = allEx.filter((_,i) => checks[i]).length;
   const pct = Math.round((feitos/allEx.length)*100);
 
@@ -373,25 +418,26 @@ async function renderContent() {
       const i = idx++;
       const done = !!checks[i];
       const gif = gifCache[ex.api];
-
       const gifHtml = gif
-        ? `<img src="${gif}" alt="${ex.nome}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"/><span class="emoji-fallback" style="display:none">${ex.emoji}</span>`
-        : `<span class="emoji-fallback">${ex.emoji}</span>`;
+        ? `<img src="${gif}" alt="${ex.nome}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"/><span class="emoji-fb" style="display:none">${ex.emoji}</span>`
+        : `<span class="emoji-fb">${ex.emoji}</span>`;
 
       html += `
-        <div class="ex-card${done?' feito':''}">
+        <div class="ex-card${done?' feito':''}" data-idx="${i}">
           <div class="ex-row" onclick="toggleEx(${i})">
             <div class="ex-gif">${gifHtml}</div>
             <div class="ex-info">
-              <div class="ex-nome">${ex.nome}</div>
-              <div class="ex-detalhe">${ex.detalhe}</div>
+              <div class="ex-nome" style="${done?'text-decoration:line-through;opacity:0.4':''}">${ex.nome}</div>
+              <div class="ex-detalhe" style="${done?'opacity:0.4':''}">${ex.detalhe}</div>
             </div>
             <div class="ex-check">${done?'✓':'○'}</div>
           </div>
-          <a class="ex-tutorial" href="${ytUrl(ex.yt)}" target="_blank" onclick="event.stopPropagation()">
-            <div class="yt-icon">▶</div>
-            Ver como fazer no YouTube
-          </a>
+          <button class="ex-ver-btn" data-vid-btn="${i}" onclick="toggleVideo(${i})">
+            <div class="yt-dot">▶</div>
+            Ver como fazer
+            <span class="arrow">▼</span>
+          </button>
+          <div class="ex-video-wrap" data-vid-wrap="${i}"></div>
         </div>`;
     });
     html += `</div>`;
