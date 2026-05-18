@@ -213,19 +213,33 @@ const TREINOS = {
   'Domingo': null,
 };
 
-// Cache
+// Cache versionado — limpa cache antigo automaticamente
+const CACHE_VERSION = 'v3';
+if (localStorage.getItem('cacheVersion') !== CACHE_VERSION) {
+  localStorage.removeItem('gifCache');
+  localStorage.setItem('cacheVersion', CACHE_VERSION);
+}
 const gifCache = JSON.parse(localStorage.getItem('gifCache') || '{}');
 
 async function getGif(apiName) {
   if (gifCache[apiName] !== undefined) return gifCache[apiName];
   try {
-    const res = await fetch(`https://exercisedb.io/api/v1/exercises/name/${encodeURIComponent(apiName)}?limit=1`);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    const gif = data?.[0]?.gifUrl || null;
-    gifCache[apiName] = gif;
+    // Passo 1: buscar exercício pelo nome
+    const s = await fetch(`https://wger.de/api/v2/exercise/search/?term=${encodeURIComponent(apiName)}&format=json&language=english`);
+    if (!s.ok) throw new Error();
+    const sd = await s.json();
+    const baseId = sd.suggestions?.[0]?.data?.base_id;
+    if (!baseId) throw new Error('sem resultado');
+
+    // Passo 2: buscar imagem pelo ID
+    const r = await fetch(`https://wger.de/api/v2/exerciseimage/?exercise_base=${baseId}&format=json`);
+    if (!r.ok) throw new Error();
+    const rd = await r.json();
+    const url = rd.results?.[0]?.image || null;
+
+    gifCache[apiName] = url;
     localStorage.setItem('gifCache', JSON.stringify(gifCache));
-    return gif;
+    return url;
   } catch {
     gifCache[apiName] = null;
     localStorage.setItem('gifCache', JSON.stringify(gifCache));
