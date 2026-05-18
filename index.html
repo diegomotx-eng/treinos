@@ -9,181 +9,101 @@
   <title>Treinos — Diego</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
       --gold: #c9a227;
-      --bg: #0a0a0a;
-      --bg2: #111111;
-      --bg3: #1a1a1a;
-      --text: #ffffff;
-      --text2: #aaaaaa;
-      --text3: #555555;
-      --green: #4caf50;
-      --red: #e53935;
-      --border: rgba(255,255,255,0.08);
+      --bg: #0a0a0a; --bg2: #111; --bg3: #1a1a1a;
+      --text: #fff; --text2: #aaa; --text3: #555;
+      --green: #4caf50; --border: rgba(255,255,255,0.08);
     }
-
-    html, body {
-      font-family: -apple-system, 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-    }
+    html, body { font-family: -apple-system,'Inter',sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
     /* HEADER */
-    .header {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(10,10,10,0.92);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 20px 12px;
-    }
+    .header { position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,.92); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 20px 12px; }
     .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
     .logo { font-size: 1rem; font-weight: 800; }
     .logo span { color: var(--gold); }
-    .hoje-badge {
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--gold); background: rgba(201,162,39,0.1);
-      border: 1px solid rgba(201,162,39,0.25); padding: 4px 12px; border-radius: 99px;
-    }
+    .hoje-badge { font-size: .7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); background: rgba(201,162,39,.1); border: 1px solid rgba(201,162,39,.25); padding: 4px 12px; border-radius: 99px; }
 
     /* TABS */
     .tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
     .tabs::-webkit-scrollbar { display: none; }
-    .tab {
-      flex-shrink: 0; padding: 7px 16px; border-radius: 99px; font-size: 0.82rem;
-      font-weight: 600; border: 1px solid var(--border); background: transparent;
-      color: var(--text2); cursor: pointer; transition: all 0.15s;
-    }
+    .tab { flex-shrink: 0; padding: 7px 16px; border-radius: 99px; font-size: .82rem; font-weight: 600; border: 1px solid var(--border); background: transparent; color: var(--text2); cursor: pointer; transition: all .15s; }
     .tab.active { background: var(--gold); color: #000; border-color: var(--gold); }
-    .tab.hoje-tab { border-color: rgba(201,162,39,0.4); color: var(--gold); }
+    .tab.hoje-tab { border-color: rgba(201,162,39,.4); color: var(--gold); }
 
     /* CONTENT */
     .content { padding: 20px 16px 60px; }
-
     .treino-header { margin-bottom: 16px; }
-    .treino-title { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+    .treino-title { font-size: 1.4rem; font-weight: 800; letter-spacing: -.5px; margin-bottom: 4px; }
     .treino-title span { color: var(--gold); }
-    .treino-sub { font-size: 0.85rem; color: var(--text2); }
+    .treino-sub { font-size: .85rem; color: var(--text2); }
 
     /* PROGRESSO */
-    .progresso-bar-wrap {
-      background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
-      padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
-    }
-    .progresso-label { font-size: 0.78rem; color: var(--text2); white-space: nowrap; }
-    .progresso-bar { flex: 1; height: 6px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
-    .progresso-fill { height: 100%; background: var(--gold); border-radius: 99px; transition: width 0.3s; }
-    .progresso-num { font-size: 0.78rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+    .prog-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .prog-label { font-size: .78rem; color: var(--text2); white-space: nowrap; }
+    .prog-bar { flex: 1; height: 6px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
+    .prog-fill { height: 100%; background: var(--gold); border-radius: 99px; transition: width .3s; }
+    .prog-num { font-size: .78rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
 
     /* GRUPO */
     .grupo { margin-bottom: 20px; }
-    .grupo-label {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--gold); margin-bottom: 8px; padding-left: 2px;
-    }
+    .grupo-label { font-size: .68rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; padding-left: 2px; }
 
-    /* CARD EXERCÍCIO */
-    .ex-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      margin-bottom: 10px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
-    .ex-card.feito { border-color: rgba(76,175,80,0.35); background: rgba(76,175,80,0.04); }
+    /* CARD */
+    .ex-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 10px; overflow: hidden; transition: border-color .2s; }
+    .ex-card.feito { border-color: rgba(76,175,80,.35); background: rgba(76,175,80,.04); }
 
-    /* LINHA PRINCIPAL — clicável para marcar */
-    .ex-row {
-      display: flex; align-items: stretch; cursor: pointer;
-    }
+    /* LINHA PRINCIPAL */
+    .ex-row { display: flex; align-items: stretch; cursor: pointer; }
 
-    /* GIF */
-    .ex-gif {
-      width: 86px; min-height: 86px; flex-shrink: 0;
-      background: var(--bg3);
-      display: flex; align-items: center; justify-content: center;
-      position: relative; overflow: hidden;
-    }
-    .ex-gif img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .ex-gif .emoji-fb { font-size: 2rem; }
-    .shimmer {
-      position: absolute; inset: 0;
-      background: linear-gradient(90deg, var(--bg3) 25%, #1f1f1f 50%, var(--bg3) 75%);
-      background-size: 200% 100%;
-      animation: sh 1.2s infinite;
-    }
+    /* MINIATURA */
+    .ex-thumb { width: 86px; min-height: 86px; flex-shrink: 0; background: var(--bg3); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+    .ex-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ex-thumb .emoji-fb { font-size: 2rem; }
+    .shimmer { position: absolute; inset: 0; background: linear-gradient(90deg,var(--bg3) 25%,#1f1f1f 50%,var(--bg3) 75%); background-size: 200% 100%; animation: sh 1.2s infinite; }
     @keyframes sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
     /* INFO */
     .ex-info { flex: 1; padding: 14px 12px; display: flex; flex-direction: column; justify-content: center; }
-    .ex-nome { font-size: 0.93rem; font-weight: 700; margin-bottom: 4px; line-height: 1.3; }
-    .ex-card.feito .ex-nome { text-decoration: line-through; opacity: 0.4; }
-    .ex-detalhe { font-size: 0.76rem; color: var(--text2); }
-    .ex-card.feito .ex-detalhe { opacity: 0.4; }
+    .ex-nome { font-size: .93rem; font-weight: 700; margin-bottom: 4px; line-height: 1.3; }
+    .ex-card.feito .ex-nome { text-decoration: line-through; opacity: .4; }
+    .ex-detalhe { font-size: .76rem; color: var(--text2); }
+    .ex-card.feito .ex-detalhe { opacity: .4; }
 
     /* CHECK */
-    .ex-check {
-      width: 44px; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; font-size: 1.1rem; color: var(--text3);
-      border-left: 1px solid var(--border);
-    }
+    .ex-check { width: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem; color: var(--text3); border-left: 1px solid var(--border); }
     .ex-card.feito .ex-check { color: var(--green); }
 
-    /* BOTÃO VER VÍDEO */
-    .ex-ver-btn {
-      width: 100%; padding: 9px 14px;
-      border-top: 1px solid var(--border);
-      background: transparent;
-      color: var(--text2);
-      font-size: 0.78rem; font-weight: 600;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 8px;
-      border: none; border-top: 1px solid var(--border);
-      transition: background 0.15s, color 0.15s;
-      text-align: left;
-    }
-    .ex-ver-btn:hover { background: rgba(255,255,255,0.03); color: var(--text); }
-    .ex-ver-btn .yt-dot {
-      width: 18px; height: 18px; border-radius: 4px;
-      background: var(--red);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; font-size: 0.55rem; color: #fff;
-    }
-    .ex-ver-btn .arrow { margin-left: auto; font-size: 0.7rem; transition: transform 0.2s; }
+    /* BOTÃO VER */
+    .ex-ver-btn { width: 100%; padding: 9px 14px; border-top: 1px solid var(--border); background: transparent; color: var(--text2); font-size: .78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; border-left: none; border-right: none; border-bottom: none; transition: background .15s, color .15s; text-align: left; }
+    .ex-ver-btn:hover { background: rgba(255,255,255,.03); color: var(--text); }
+    .ex-ver-btn .icone { font-size: 1rem; }
+    .ex-ver-btn .arrow { margin-left: auto; font-size: .7rem; transition: transform .2s; }
     .ex-ver-btn.aberto .arrow { transform: rotate(180deg); }
+    .ex-ver-btn.aberto { color: var(--gold); }
 
-    /* VÍDEO EMBED */
-    .ex-video-wrap {
-      display: none;
-      border-top: 1px solid var(--border);
-      background: #000;
-    }
-    .ex-video-wrap.aberto { display: block; }
-    .ex-video-wrap iframe {
-      width: 100%;
-      height: 200px;
-      display: block;
-      border: none;
-    }
+    /* GIF EXPANDIDO */
+    .ex-gif-wrap { display: none; border-top: 1px solid var(--border); background: #000; text-align: center; }
+    .ex-gif-wrap.aberto { display: block; }
+    .ex-gif-wrap img { width: 100%; max-height: 300px; object-fit: contain; display: block; }
+    .ex-gif-wrap .gif-loading { padding: 40px; color: var(--text2); font-size: .85rem; }
+    .ex-gif-wrap .gif-erro { padding: 32px 20px; color: var(--text2); font-size: .85rem; text-align: center; line-height: 1.6; }
+
+    /* MODAL */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+    .modal-bg.aberto { display: flex; }
+    .modal-inner { position: relative; max-width: 400px; width: 100%; }
+    .modal-inner img { width: 100%; border-radius: 12px; display: block; }
+    .modal-fechar { position: absolute; top: -14px; right: -14px; width: 32px; height: 32px; background: var(--bg2); border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .9rem; cursor: pointer; color: var(--text2); }
 
     /* DESCANSO */
-    .descanso-card {
-      background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
-      padding: 40px 20px; text-align: center;
-    }
+    .descanso-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 40px 20px; text-align: center; }
     .descanso-emoji { font-size: 2.5rem; margin-bottom: 12px; }
     .descanso-titulo { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
-    .descanso-sub { font-size: 0.88rem; color: var(--text2); line-height: 1.6; }
+    .descanso-sub { font-size: .88rem; color: var(--text2); line-height: 1.6; }
 
     /* RESET */
-    .reset-btn {
-      width: 100%; padding: 12px; border-radius: 12px;
-      border: 1px solid var(--border); background: transparent;
-      color: var(--text3); font-size: 0.82rem; font-weight: 600;
-      cursor: pointer; margin-top: 4px; transition: all 0.15s;
-    }
+    .reset-btn { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: transparent; color: var(--text3); font-size: .82rem; font-weight: 600; cursor: pointer; margin-top: 4px; transition: all .15s; }
     .reset-btn:hover { border-color: var(--gold); color: var(--gold); }
   </style>
 </head>
@@ -199,6 +119,14 @@
 
 <div class="content" id="content"></div>
 
+<!-- MODAL GIF AMPLIADO -->
+<div class="modal-bg" id="modal" onclick="fecharModal()">
+  <div class="modal-inner" onclick="event.stopPropagation()">
+    <div class="modal-fechar" onclick="fecharModal()">✕</div>
+    <img id="modal-img" src="" alt=""/>
+  </div>
+</div>
+
 <script>
 const DIAS = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
 
@@ -207,14 +135,14 @@ const TREINOS = {
     titulo: 'Peito', sub: 'Tríceps como auxiliar',
     grupos: [
       { nome: 'Peito', exercicios: [
-        { nome: 'Supino Reto com Barra',       detalhe: '4 séries × 8–12 reps',  api: 'barbell bench press',     yt: 'supino reto com barra execução correta',     emoji: '🏋️' },
-        { nome: 'Supino Inclinado Halteres',    detalhe: '3 séries × 10–12 reps', api: 'incline dumbbell press',  yt: 'supino inclinado halteres execução correta', emoji: '💪' },
-        { nome: 'Crucifixo com Halteres',       detalhe: '3 séries × 12–15 reps', api: 'dumbbell fly',            yt: 'crucifixo halteres execução correta',        emoji: '🦅' },
-        { nome: 'Crossover no Cabo',            detalhe: '3 séries × 12–15 reps', api: 'cable crossover',         yt: 'crossover polia execução correta',           emoji: '🔀' },
+        { nome: 'Supino Reto com Barra',       detalhe: '4 séries × 8–12 reps',  api: 'barbell bench press',      emoji: '🏋️' },
+        { nome: 'Supino Inclinado Halteres',    detalhe: '3 séries × 10–12 reps', api: 'incline dumbbell press',   emoji: '💪' },
+        { nome: 'Crucifixo com Halteres',       detalhe: '3 séries × 12–15 reps', api: 'dumbbell fly',             emoji: '🦅' },
+        { nome: 'Crossover no Cabo',            detalhe: '3 séries × 12–15 reps', api: 'cable crossover',          emoji: '🔀' },
       ]},
       { nome: 'Tríceps', exercicios: [
-        { nome: 'Tríceps Pulley (corda)',        detalhe: '4 séries × 10–12 reps', api: 'triceps pushdown',        yt: 'triceps pulley corda execução correta',      emoji: '⬇️' },
-        { nome: 'Tríceps Francês',              detalhe: '3 séries × 10–12 reps', api: 'skull crusher',           yt: 'triceps frances execução correta',           emoji: '💀' },
+        { nome: 'Tríceps Pulley (corda)',        detalhe: '4 séries × 10–12 reps', api: 'triceps pushdown',         emoji: '⬇️' },
+        { nome: 'Tríceps Francês',              detalhe: '3 séries × 10–12 reps', api: 'skull crusher',            emoji: '💀' },
       ]},
     ]
   },
@@ -222,14 +150,14 @@ const TREINOS = {
     titulo: 'Costas', sub: 'Bíceps como auxiliar',
     grupos: [
       { nome: 'Costas', exercicios: [
-        { nome: 'Puxada na Frente',             detalhe: '4 séries × 8–12 reps',  api: 'lat pulldown',            yt: 'puxada frente execução correta',             emoji: '🔽' },
-        { nome: 'Remada Curvada com Barra',      detalhe: '4 séries × 8–12 reps',  api: 'barbell bent over row',   yt: 'remada curvada barra execução correta',      emoji: '🏋️' },
-        { nome: 'Remada Unilateral',             detalhe: '3 séries × 10–12 reps', api: 'one arm dumbbell row',    yt: 'remada unilateral haltere execução correta', emoji: '💪' },
-        { nome: 'Pullover com Halter',           detalhe: '3 séries × 12 reps',    api: 'dumbbell pullover',       yt: 'pullover halter execução correta',           emoji: '🌊' },
+        { nome: 'Puxada na Frente',             detalhe: '4 séries × 8–12 reps',  api: 'lat pulldown',             emoji: '🔽' },
+        { nome: 'Remada Curvada com Barra',      detalhe: '4 séries × 8–12 reps',  api: 'barbell bent over row',    emoji: '🏋️' },
+        { nome: 'Remada Unilateral',             detalhe: '3 séries × 10–12 reps', api: 'one arm dumbbell row',     emoji: '💪' },
+        { nome: 'Pullover com Halter',           detalhe: '3 séries × 12 reps',    api: 'dumbbell pullover',        emoji: '🌊' },
       ]},
       { nome: 'Bíceps', exercicios: [
-        { nome: 'Rosca Direta com Barra',        detalhe: '4 séries × 10–12 reps', api: 'barbell curl',            yt: 'rosca direta barra execução correta',        emoji: '💪' },
-        { nome: 'Rosca Martelo',                detalhe: '3 séries × 10–12 reps', api: 'hammer curl',             yt: 'rosca martelo execução correta',             emoji: '🔨' },
+        { nome: 'Rosca Direta com Barra',        detalhe: '4 séries × 10–12 reps', api: 'barbell curl',             emoji: '💪' },
+        { nome: 'Rosca Martelo',                detalhe: '3 séries × 10–12 reps', api: 'hammer curl',              emoji: '🔨' },
       ]},
     ]
   },
@@ -237,14 +165,14 @@ const TREINOS = {
     titulo: 'Pernas', sub: 'Quadríceps, posterior e panturrilha',
     grupos: [
       { nome: 'Quadríceps', exercicios: [
-        { nome: 'Agachamento Livre',            detalhe: '4 séries × 8–12 reps',  api: 'barbell squat',           yt: 'agachamento livre execução correta',         emoji: '🦵' },
-        { nome: 'Leg Press 45°',                detalhe: '4 séries × 10–12 reps', api: 'leg press',               yt: 'leg press 45 execução correta',              emoji: '🦵' },
-        { nome: 'Cadeira Extensora',            detalhe: '3 séries × 12–15 reps', api: 'leg extension',           yt: 'cadeira extensora execução correta',         emoji: '🦵' },
+        { nome: 'Agachamento Livre',            detalhe: '4 séries × 8–12 reps',  api: 'barbell squat',            emoji: '🦵' },
+        { nome: 'Leg Press 45°',                detalhe: '4 séries × 10–12 reps', api: 'leg press',                emoji: '🦵' },
+        { nome: 'Cadeira Extensora',            detalhe: '3 séries × 12–15 reps', api: 'leg extension',            emoji: '🦵' },
       ]},
       { nome: 'Posterior + Panturrilha', exercicios: [
-        { nome: 'Mesa Flexora',                 detalhe: '3 séries × 12–15 reps', api: 'lying leg curl',          yt: 'mesa flexora execução correta',              emoji: '🦵' },
-        { nome: 'Stiff com Halteres',           detalhe: '3 séries × 10–12 reps', api: 'romanian deadlift',       yt: 'stiff halteres execução correta',            emoji: '🏋️' },
-        { nome: 'Panturrilha em Pé',            detalhe: '4 séries × 15–20 reps', api: 'standing calf raise',     yt: 'panturrilha em pe execução correta',         emoji: '🦶' },
+        { nome: 'Mesa Flexora',                 detalhe: '3 séries × 12–15 reps', api: 'lying leg curl',           emoji: '🦵' },
+        { nome: 'Stiff com Halteres',           detalhe: '3 séries × 10–12 reps', api: 'romanian deadlift',        emoji: '🏋️' },
+        { nome: 'Panturrilha em Pé',            detalhe: '4 séries × 15–20 reps', api: 'standing calf raise',      emoji: '🦶' },
       ]},
     ]
   },
@@ -252,14 +180,14 @@ const TREINOS = {
     titulo: 'Ombros', sub: 'Trapézio como auxiliar',
     grupos: [
       { nome: 'Ombros', exercicios: [
-        { nome: 'Desenvolvimento Halteres',     detalhe: '4 séries × 10–12 reps', api: 'dumbbell shoulder press', yt: 'desenvolvimento halteres ombro execução',    emoji: '🔝' },
-        { nome: 'Elevação Lateral',             detalhe: '4 séries × 12–15 reps', api: 'lateral raise',           yt: 'elevacao lateral execução correta',          emoji: '↔️' },
-        { nome: 'Elevação Frontal',             detalhe: '3 séries × 12 reps',    api: 'front raise',             yt: 'elevacao frontal execução correta',          emoji: '⬆️' },
-        { nome: 'Voador Invertido',             detalhe: '3 séries × 12–15 reps', api: 'reverse fly',             yt: 'voador invertido posterior execução',        emoji: '🦅' },
+        { nome: 'Desenvolvimento Halteres',     detalhe: '4 séries × 10–12 reps', api: 'dumbbell shoulder press',  emoji: '🔝' },
+        { nome: 'Elevação Lateral',             detalhe: '4 séries × 12–15 reps', api: 'lateral raise',            emoji: '↔️' },
+        { nome: 'Elevação Frontal',             detalhe: '3 séries × 12 reps',    api: 'front raise',              emoji: '⬆️' },
+        { nome: 'Voador Invertido',             detalhe: '3 séries × 12–15 reps', api: 'reverse fly',              emoji: '🦅' },
       ]},
       { nome: 'Trapézio', exercicios: [
-        { nome: 'Encolhimento com Halteres',    detalhe: '3 séries × 12–15 reps', api: 'dumbbell shrug',          yt: 'encolhimento halteres execução correta',     emoji: '🤷' },
-        { nome: 'Remada Alta',                  detalhe: '3 séries × 12 reps',    api: 'upright row',             yt: 'remada alta execução correta',               emoji: '⬆️' },
+        { nome: 'Encolhimento com Halteres',    detalhe: '3 séries × 12–15 reps', api: 'dumbbell shrug',           emoji: '🤷' },
+        { nome: 'Remada Alta',                  detalhe: '3 séries × 12 reps',    api: 'upright row',              emoji: '⬆️' },
       ]},
     ]
   },
@@ -267,17 +195,17 @@ const TREINOS = {
     titulo: 'Braços + Abdômen', sub: 'Bíceps, tríceps e core',
     grupos: [
       { nome: 'Bíceps', exercicios: [
-        { nome: 'Rosca Scott',                  detalhe: '4 séries × 10–12 reps', api: 'preacher curl',           yt: 'rosca scott execução correta',               emoji: '💪' },
-        { nome: 'Rosca Concentrada',            detalhe: '3 séries × 12 reps',    api: 'concentration curl',      yt: 'rosca concentrada execução correta',         emoji: '💪' },
+        { nome: 'Rosca Scott',                  detalhe: '4 séries × 10–12 reps', api: 'preacher curl',            emoji: '💪' },
+        { nome: 'Rosca Concentrada',            detalhe: '3 séries × 12 reps',    api: 'concentration curl',       emoji: '💪' },
       ]},
       { nome: 'Tríceps', exercicios: [
-        { nome: 'Tríceps Testa',                detalhe: '4 séries × 10–12 reps', api: 'skull crusher',           yt: 'triceps testa execução correta',             emoji: '💀' },
-        { nome: 'Mergulho entre Bancos',        detalhe: '3 séries × 12–15 reps', api: 'tricep dip',              yt: 'mergulho banco triceps execução correta',    emoji: '⬇️' },
+        { nome: 'Tríceps Testa',                detalhe: '4 séries × 10–12 reps', api: 'skull crusher',            emoji: '💀' },
+        { nome: 'Mergulho entre Bancos',        detalhe: '3 séries × 12–15 reps', api: 'tricep dip',               emoji: '⬇️' },
       ]},
       { nome: 'Abdômen', exercicios: [
-        { nome: 'Abdominal Crunch',             detalhe: '3 séries × 20 reps',    api: 'crunch',                  yt: 'abdominal crunch execução correta',          emoji: '⚡' },
-        { nome: 'Prancha',                      detalhe: '3 séries × 30–45s',     api: 'plank',                   yt: 'prancha abdominal execução correta',         emoji: '🧱' },
-        { nome: 'Elevação de Pernas',           detalhe: '3 séries × 15 reps',    api: 'leg raise',               yt: 'elevacao de pernas abdominal execução',     emoji: '🦵' },
+        { nome: 'Abdominal Crunch',             detalhe: '3 séries × 20 reps',    api: 'crunch',                   emoji: '⚡' },
+        { nome: 'Prancha',                      detalhe: '3 séries × 30–45s',     api: 'plank',                    emoji: '🧱' },
+        { nome: 'Elevação de Pernas',           detalhe: '3 séries × 15 reps',    api: 'leg raise',                emoji: '🦵' },
       ]},
     ]
   },
@@ -285,8 +213,9 @@ const TREINOS = {
   'Domingo': null,
 };
 
-// Cache GIFs
+// Cache
 const gifCache = JSON.parse(localStorage.getItem('gifCache') || '{}');
+
 async function getGif(apiName) {
   if (gifCache[apiName] !== undefined) return gifCache[apiName];
   try {
@@ -304,7 +233,15 @@ async function getGif(apiName) {
   }
 }
 
-// Dia atual
+function abrirModal(src) {
+  document.getElementById('modal-img').src = src;
+  document.getElementById('modal').classList.add('aberto');
+}
+function fecharModal() {
+  document.getElementById('modal').classList.remove('aberto');
+}
+
+// Dia
 const MAP = [6,0,1,2,3,4,5];
 const hojeNome = DIAS[MAP[new Date().getDay()]];
 document.getElementById('hoje-badge').textContent = 'Hoje: ' + hojeNome;
@@ -319,7 +256,6 @@ DIAS.forEach(dia => {
   btn.onclick = () => { diaAtivo=dia; renderTabs(); renderContent(); };
   tabsEl.appendChild(btn);
 });
-
 function renderTabs() {
   tabsEl.querySelectorAll('.tab').forEach((b,i) => {
     b.className='tab'+(DIAS[i]===hojeNome?' hoje-tab':'')+(DIAS[i]===diaAtivo?' active':'');
@@ -332,49 +268,45 @@ function toggleEx(idx) {
   const c = getChecks(diaAtivo);
   c[idx] = !c[idx];
   localStorage.setItem('checks_'+diaAtivo, JSON.stringify(c));
-  // Só atualiza o card específico sem re-renderizar tudo
   const card = document.querySelector(`[data-idx="${idx}"]`);
   if (card) {
-    card.classList.toggle('feito', !!c[idx]);
-    card.querySelector('.ex-check').textContent = c[idx] ? '✓' : '○';
-    card.querySelector('.ex-nome').style.textDecoration = c[idx] ? 'line-through' : '';
-    card.querySelector('.ex-nome').style.opacity = c[idx] ? '0.4' : '';
-    card.querySelector('.ex-detalhe').style.opacity = c[idx] ? '0.4' : '';
+    const done = c[idx];
+    card.classList.toggle('feito', done);
+    card.querySelector('.ex-check').textContent = done ? '✓' : '○';
+    const nome = card.querySelector('.ex-nome');
+    const det = card.querySelector('.ex-detalhe');
+    nome.style.textDecoration = done ? 'line-through' : '';
+    nome.style.opacity = done ? '.4' : '';
+    det.style.opacity = done ? '.4' : '';
   }
-  // Atualiza barra de progresso
   const treino = TREINOS[diaAtivo];
   const allEx = treino.grupos.flatMap(g => g.exercicios);
   const checks = getChecks(diaAtivo);
   const feitos = allEx.filter((_,i) => checks[i]).length;
   const pct = Math.round((feitos/allEx.length)*100);
-  const fill = document.querySelector('.progresso-fill');
-  const num = document.querySelector('.progresso-num');
+  const fill = document.querySelector('.prog-fill');
+  const num = document.querySelector('.prog-num');
   if (fill) fill.style.width = pct+'%';
   if (num) num.textContent = feitos+'/'+allEx.length;
 }
 
-function toggleVideo(idx) {
-  const btn = document.querySelector(`[data-vid-btn="${idx}"]`);
-  const wrap = document.querySelector(`[data-vid-wrap="${idx}"]`);
+function toggleGif(idx) {
+  const btn = document.querySelector(`[data-gif-btn="${idx}"]`);
+  const wrap = document.querySelector(`[data-gif-wrap="${idx}"]`);
   if (!btn || !wrap) return;
   const aberto = wrap.classList.toggle('aberto');
   btn.classList.toggle('aberto', aberto);
-  // Lazy load do iframe
-  if (aberto && !wrap.querySelector('iframe')) {
-    const ex = getExByIdx(idx);
-    if (ex) {
-      const query = encodeURIComponent(ex.yt);
-      wrap.innerHTML = `<iframe src="https://www.youtube.com/embed?listType=search&list=${query}&index=0&hl=pt-BR&cc_lang_pref=pt" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
+  if (aberto && !wrap.dataset.loaded) {
+    wrap.dataset.loaded = '1';
+    const treino = TREINOS[diaAtivo];
+    const ex = treino.grupos.flatMap(g => g.exercicios)[idx];
+    const gif = ex && gifCache[ex.api];
+    if (gif) {
+      wrap.innerHTML = `<img src="${gif}" alt="${ex.nome}" onclick="abrirModal('${gif}')"/>`;
+    } else {
+      wrap.innerHTML = `<div class="gif-erro">😅 Imagem não disponível para este exercício.<br/>Pesquise "<strong>${ex?.nome || ''}</strong>" no Google para ver como fazer.</div>`;
     }
-  } else if (!aberto) {
-    wrap.innerHTML = '';
   }
-}
-
-function getExByIdx(idx) {
-  const treino = TREINOS[diaAtivo];
-  if (!treino) return null;
-  return treino.grupos.flatMap(g => g.exercicios)[idx] || null;
 }
 
 function resetDia() { localStorage.removeItem('checks_'+diaAtivo); renderContent(); }
@@ -382,14 +314,8 @@ function resetDia() { localStorage.removeItem('checks_'+diaAtivo); renderContent
 async function renderContent() {
   const el = document.getElementById('content');
   const treino = TREINOS[diaAtivo];
-
   if (!treino) {
-    el.innerHTML = `
-      <div class="descanso-card">
-        <div class="descanso-emoji">😴</div>
-        <div class="descanso-titulo">Dia de descanso</div>
-        <div class="descanso-sub">Recuperação é parte do treino.<br/>Descansa e cresce.</div>
-      </div>`;
+    el.innerHTML = `<div class="descanso-card"><div class="descanso-emoji">😴</div><div class="descanso-titulo">Dia de descanso</div><div class="descanso-sub">Recuperação é parte do treino.<br/>Descansa e cresce.</div></div>`;
     return;
   }
 
@@ -405,10 +331,10 @@ async function renderContent() {
       <div class="treino-title">${diaAtivo} — <span>${treino.titulo}</span></div>
       <div class="treino-sub">${treino.sub}</div>
     </div>
-    <div class="progresso-bar-wrap">
-      <div class="progresso-label">Progresso</div>
-      <div class="progresso-bar"><div class="progresso-fill" style="width:${pct}%"></div></div>
-      <div class="progresso-num">${feitos}/${allEx.length}</div>
+    <div class="prog-wrap">
+      <div class="prog-label">Progresso</div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
+      <div class="prog-num">${feitos}/${allEx.length}</div>
     </div>`;
 
   let idx = 0;
@@ -418,26 +344,25 @@ async function renderContent() {
       const i = idx++;
       const done = !!checks[i];
       const gif = gifCache[ex.api];
-      const gifHtml = gif
+      const thumbHtml = gif
         ? `<img src="${gif}" alt="${ex.nome}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"/><span class="emoji-fb" style="display:none">${ex.emoji}</span>`
         : `<span class="emoji-fb">${ex.emoji}</span>`;
 
       html += `
         <div class="ex-card${done?' feito':''}" data-idx="${i}">
           <div class="ex-row" onclick="toggleEx(${i})">
-            <div class="ex-gif">${gifHtml}</div>
+            <div class="ex-thumb">${thumbHtml}</div>
             <div class="ex-info">
-              <div class="ex-nome" style="${done?'text-decoration:line-through;opacity:0.4':''}">${ex.nome}</div>
-              <div class="ex-detalhe" style="${done?'opacity:0.4':''}">${ex.detalhe}</div>
+              <div class="ex-nome" style="${done?'text-decoration:line-through;opacity:.4':''}">${ex.nome}</div>
+              <div class="ex-detalhe" style="${done?'opacity:.4':''}">${ex.detalhe}</div>
             </div>
             <div class="ex-check">${done?'✓':'○'}</div>
           </div>
-          <button class="ex-ver-btn" data-vid-btn="${i}" onclick="toggleVideo(${i})">
-            <div class="yt-dot">▶</div>
-            Ver como fazer
+          <button class="ex-ver-btn" data-gif-btn="${i}" onclick="toggleGif(${i})">
+            <span class="icone">📸</span> Ver execução do exercício
             <span class="arrow">▼</span>
           </button>
-          <div class="ex-video-wrap" data-vid-wrap="${i}"></div>
+          <div class="ex-gif-wrap" data-gif-wrap="${i}"></div>
         </div>`;
     });
     html += `</div>`;
