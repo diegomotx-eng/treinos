@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Treinos"/>
+  <title>Treinos — Diego</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #c9a227;
+      --gold-light: #e2b93b;
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --text: #ffffff;
+      --text2: #aaaaaa;
+      --text3: #555555;
+      --green: #4caf50;
+      --border: rgba(255,255,255,0.08);
+      --glass: rgba(255,255,255,0.05);
+    }
+
+    html, body {
+      height: 100%;
+      font-family: -apple-system, 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky;
+      top: 0; z-index: 50;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px 12px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .logo { font-size: 1rem; font-weight: 800; }
+    .logo span { color: var(--gold); }
+
+    .hoje-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(201,162,39,0.1);
+      border: 1px solid rgba(201,162,39,0.25);
+      padding: 4px 12px;
+      border-radius: 99px;
+    }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      flex-shrink: 0;
+      padding: 7px 16px;
+      border-radius: 99px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab.active { background: var(--gold); color: #000; border-color: var(--gold); }
+    .tab.hoje-tab { border-color: rgba(201,162,39,0.4); color: var(--gold); }
+
+    /* ── CONTEÚDO ── */
+    .content { padding: 20px 16px 48px; }
+
+    .treino-header { margin-bottom: 16px; }
+    .treino-title { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+    .treino-title span { color: var(--gold); }
+    .treino-sub { font-size: 0.85rem; color: var(--text2); }
+
+    /* ── PROGRESSO ── */
+    .progresso-bar-wrap {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .progresso-label { font-size: 0.78rem; color: var(--text2); white-space: nowrap; }
+    .progresso-bar { flex: 1; height: 6px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
+    .progresso-fill { height: 100%; background: var(--gold); border-radius: 99px; transition: width 0.3s; }
+    .progresso-num { font-size: 0.78rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+
+    /* ── GRUPO ── */
+    .grupo { margin-bottom: 20px; }
+    .grupo-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+      padding-left: 2px;
+    }
+
+    /* ── EXERCÍCIO ── */
+    .exercicio {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow: hidden;
+      transition: border-color 0.15s;
+      cursor: pointer;
+    }
+    .exercicio.feito { border-color: rgba(76,175,80,0.4); background: rgba(76,175,80,0.04); }
+    .exercicio.feito .ex-nome { text-decoration: line-through; opacity: 0.45; }
+    .exercicio.feito .ex-detalhe { opacity: 0.4; }
+
+    /* ── FOTO ── */
+    .ex-foto {
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ex-foto img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ex-foto .fallback {
+      font-size: 1.8rem;
+      position: absolute;
+    }
+
+    .ex-foto .skeleton {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--bg3) 25%, #222 50%, var(--bg3) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── INFO ── */
+    .ex-info { flex: 1; padding: 14px 12px; }
+    .ex-nome { font-size: 0.92rem; font-weight: 600; margin-bottom: 4px; line-height: 1.3; }
+    .ex-detalhe { font-size: 0.76rem; color: var(--text2); }
+
+    /* ── CHECK ── */
+    .ex-check {
+      width: 40px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+      color: var(--text3);
+      border-left: 1px solid var(--border);
+    }
+    .exercicio.feito .ex-check { color: var(--green); }
+
+    /* ── DESCANSO ── */
+    .descanso-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .descanso-emoji { font-size: 2.5rem; margin-bottom: 12px; }
+    .descanso-titulo { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .descanso-sub { font-size: 0.88rem; color: var(--text2); line-height: 1.6; }
+
+    /* ── RESET ── */
+    .reset-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text3);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: all 0.15s;
+    }
+    .reset-btn:hover { border-color: var(--gold); color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">D<span>.</span>M Treinos</div>
+    <div class="hoje-badge" id="hoje-badge">Hoje: —</div>
+  </div>
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="content" id="content"></div>
+
+<script>
+const DIAS = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'];
+
+// Nome em inglês para busca na API → fallback emoji
+const TREINOS = {
+  'Segunda': {
+    titulo: 'Peito', sub: 'Tríceps como auxiliar',
+    grupos: [
+      { nome: 'Peito', exercicios: [
+        { nome: 'Supino Reto com Barra',         detalhe: '4 séries × 8–12 reps',  api: 'barbell bench press',       emoji: '🏋️' },
+        { nome: 'Supino Inclinado com Halteres',  detalhe: '3 séries × 10–12 reps', api: 'incline dumbbell press',    emoji: '💪' },
+        { nome: 'Crucifixo com Halteres',         detalhe: '3 séries × 12–15 reps', api: 'dumbbell fly',              emoji: '🦅' },
+        { nome: 'Crossover no Cabo',              detalhe: '3 séries × 12–15 reps', api: 'cable crossover',           emoji: '🔀' },
+      ]},
+      { nome: 'Tríceps', exercicios: [
+        { nome: 'Tríceps Pulley (corda)',          detalhe: '4 séries × 10–12 reps', api: 'triceps pushdown',          emoji: '⬇️' },
+        { nome: 'Tríceps Francês',                detalhe: '3 séries × 10–12 reps', api: 'skull crusher',             emoji: '💀' },
+      ]},
+    ]
+  },
+  'Terça': {
+    titulo: 'Costas', sub: 'Bíceps como auxiliar',
+    grupos: [
+      { nome: 'Costas', exercicios: [
+        { nome: 'Puxada na Frente',               detalhe: '4 séries × 8–12 reps',  api: 'lat pulldown',              emoji: '🔽' },
+        { nome: 'Remada Curvada com Barra',        detalhe: '4 séries × 8–12 reps',  api: 'barbell bent over row',     emoji: '🏋️' },
+        { nome: 'Remada Unilateral',               detalhe: '3 séries × 10–12 reps', api: 'one arm dumbbell row',      emoji: '💪' },
+        { nome: 'Pullover com Halter',             detalhe: '3 séries × 12 reps',    api: 'dumbbell pullover',         emoji: '🌊' },
+      ]},
+      { nome: 'Bíceps', exercicios: [
+        { nome: 'Rosca Direta com Barra',          detalhe: '4 séries × 10–12 reps', api: 'barbell curl',              emoji: '💪' },
+        { nome: 'Rosca Martelo',                  detalhe: '3 séries × 10–12 reps', api: 'hammer curl',               emoji: '🔨' },
+      ]},
+    ]
+  },
+  'Quarta': {
+    titulo: 'Pernas', sub: 'Quadríceps, posterior e panturrilha',
+    grupos: [
+      { nome: 'Quadríceps', exercicios: [
+        { nome: 'Agachamento Livre',              detalhe: '4 séries × 8–12 reps',  api: 'barbell squat',             emoji: '🦵' },
+        { nome: 'Leg Press 45°',                  detalhe: '4 séries × 10–12 reps', api: 'leg press',                 emoji: '🦵' },
+        { nome: 'Cadeira Extensora',              detalhe: '3 séries × 12–15 reps', api: 'leg extension',             emoji: '🦵' },
+      ]},
+      { nome: 'Posterior + Panturrilha', exercicios: [
+        { nome: 'Mesa Flexora',                   detalhe: '3 séries × 12–15 reps', api: 'lying leg curl',            emoji: '🦵' },
+        { nome: 'Stiff com Halteres',             detalhe: '3 séries × 10–12 reps', api: 'romanian deadlift',         emoji: '🏋️' },
+        { nome: 'Panturrilha em Pé',              detalhe: '4 séries × 15–20 reps', api: 'standing calf raise',       emoji: '🦶' },
+      ]},
+    ]
+  },
+  'Quinta': {
+    titulo: 'Ombros', sub: 'Trapézio como auxiliar',
+    grupos: [
+      { nome: 'Ombros', exercicios: [
+        { nome: 'Desenvolvimento com Halteres',   detalhe: '4 séries × 10–12 reps', api: 'dumbbell shoulder press',   emoji: '🔝' },
+        { nome: 'Elevação Lateral',               detalhe: '4 séries × 12–15 reps', api: 'lateral raise',             emoji: '↔️' },
+        { nome: 'Elevação Frontal',               detalhe: '3 séries × 12 reps',    api: 'front raise',               emoji: '⬆️' },
+        { nome: 'Voador Invertido',               detalhe: '3 séries × 12–15 reps', api: 'reverse fly',               emoji: '🦅' },
+      ]},
+      { nome: 'Trapézio', exercicios: [
+        { nome: 'Encolhimento com Halteres',      detalhe: '3 séries × 12–15 reps', api: 'dumbbell shrug',            emoji: '🤷' },
+        { nome: 'Remada Alta',                    detalhe: '3 séries × 12 reps',    api: 'upright row',               emoji: '⬆️' },
+      ]},
+    ]
+  },
+  'Sexta': {
+    titulo: 'Braços + Abdômen', sub: 'Bíceps, tríceps e core',
+    grupos: [
+      { nome: 'Bíceps', exercicios: [
+        { nome: 'Rosca Scott',                    detalhe: '4 séries × 10–12 reps', api: 'preacher curl',             emoji: '💪' },
+        { nome: 'Rosca Concentrada',              detalhe: '3 séries × 12 reps',    api: 'concentration curl',        emoji: '💪' },
+      ]},
+      { nome: 'Tríceps', exercicios: [
+        { nome: 'Tríceps Testa',                  detalhe: '4 séries × 10–12 reps', api: 'skull crusher',             emoji: '💀' },
+        { nome: 'Mergulho entre Bancos',          detalhe: '3 séries × 12–15 reps', api: 'tricep dip',                emoji: '⬇️' },
+      ]},
+      { nome: 'Abdômen', exercicios: [
+        { nome: 'Abdominal Crunch',               detalhe: '3 séries × 20 reps',    api: 'crunch',                    emoji: '⚡' },
+        { nome: 'Prancha',                        detalhe: '3 séries × 30–45s',      api: 'plank',                     emoji: '🧱' },
+        { nome: 'Elevação de Pernas',             detalhe: '3 séries × 15 reps',    api: 'leg raise',                 emoji: '🦵' },
+      ]},
+    ]
+  },
+  'Sábado': null,
+  'Domingo': null,
+};
+
+// Cache de GIFs
+const gifCache = JSON.parse(localStorage.getItem('gifCache') || '{}');
+
+async function getGif(apiName) {
+  if (gifCache[apiName]) return gifCache[apiName];
+  try {
+    const encoded = encodeURIComponent(apiName);
+    const res = await fetch(`https://exercisedb.io/api/v1/exercises/name/${encoded}?limit=1`, {
+      headers: { 'x-rapidapi-host': 'exercisedb.p.rapidapi.com' }
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const gif = data?.[0]?.gifUrl || null;
+    if (gif) { gifCache[apiName] = gif; localStorage.setItem('gifCache', JSON.stringify(gifCache)); }
+    return gif;
+  } catch { return null; }
+}
+
+// Dia atual
+const JS_DAY = new Date().getDay();
+const MAP = [6, 0, 1, 2, 3, 4, 5];
+const hojeIdx = MAP[JS_DAY];
+const hojeNome = DIAS[hojeIdx];
+document.getElementById('hoje-badge').textContent = 'Hoje: ' + hojeNome;
+
+let diaAtivo = hojeNome;
+
+// Tabs
+const tabsEl = document.getElementById('tabs');
+DIAS.forEach(dia => {
+  const btn = document.createElement('button');
+  btn.className = 'tab' + (dia === hojeNome ? ' hoje-tab' : '') + (dia === diaAtivo ? ' active' : '');
+  btn.textContent = dia;
+  btn.onclick = () => { diaAtivo = dia; renderTabs(); renderContent(); };
+  tabsEl.appendChild(btn);
+});
+
+function renderTabs() {
+  tabsEl.querySelectorAll('.tab').forEach((btn, i) => {
+    btn.className = 'tab' +
+      (DIAS[i] === hojeNome ? ' hoje-tab' : '') +
+      (DIAS[i] === diaAtivo ? ' active' : '');
+  });
+}
+
+function getChecks(dia) { return JSON.parse(localStorage.getItem('checks_' + dia) || '{}'); }
+function resetChecks(dia) { localStorage.removeItem('checks_' + dia); }
+
+function toggleEx(idx) {
+  const c = getChecks(diaAtivo);
+  c[idx] = !c[idx];
+  localStorage.setItem('checks_' + diaAtivo, JSON.stringify(c));
+  renderContent();
+}
+function resetDia() { resetChecks(diaAtivo); renderContent(); }
+
+async function loadGifs(treino) {
+  const allEx = treino.grupos.flatMap(g => g.exercicios);
+  await Promise.all(allEx.map(ex => getGif(ex.api)));
+}
+
+async function renderContent() {
+  const el = document.getElementById('content');
+  const treino = TREINOS[diaAtivo];
+
+  if (!treino) {
+    el.innerHTML = `
+      <div class="descanso-card">
+        <div class="descanso-emoji">😴</div>
+        <div class="descanso-titulo">Dia de descanso</div>
+        <div class="descanso-sub">Recuperação é parte do treino.<br/>Aproveita pra descansar e crescer.</div>
+      </div>`;
+    return;
+  }
+
+  // Busca GIFs em paralelo (usa cache se disponível)
+  await loadGifs(treino);
+
+  const checks = getChecks(diaAtivo);
+  const allEx = treino.grupos.flatMap(g => g.exercicios);
+  const feitos = allEx.filter((_, i) => checks[i]).length;
+  const pct = Math.round((feitos / allEx.length) * 100);
+
+  let html = `
+    <div class="treino-header">
+      <div class="treino-title">${diaAtivo} — <span>${treino.titulo}</span></div>
+      <div class="treino-sub">${treino.sub}</div>
+    </div>
+    <div class="progresso-bar-wrap">
+      <div class="progresso-label">Progresso</div>
+      <div class="progresso-bar"><div class="progresso-fill" style="width:${pct}%"></div></div>
+      <div class="progresso-num">${feitos}/${allEx.length}</div>
+    </div>`;
+
+  let globalIdx = 0;
+  treino.grupos.forEach(grupo => {
+    html += `<div class="grupo"><div class="grupo-label">${grupo.nome}</div>`;
+    grupo.exercicios.forEach(ex => {
+      const idx = globalIdx++;
+      const done = !!checks[idx];
+      const gif = gifCache[ex.api];
+      const fotoHtml = gif
+        ? `<img src="${gif}" alt="${ex.nome}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><span class="fallback" style="display:none">${ex.emoji}</span>`
+        : `<span class="fallback">${ex.emoji}</span>`;
+
+      html += `
+        <div class="exercicio${done ? ' feito' : ''}" onclick="toggleEx(${idx})">
+          <div class="ex-foto">${fotoHtml}</div>
+          <div class="ex-info">
+            <div class="ex-nome">${ex.nome}</div>
+            <div class="ex-detalhe">${ex.detalhe}</div>
+          </div>
+          <div class="ex-check">${done ? '✓' : '○'}</div>
+        </div>`;
+    });
+    html += `</div>`;
+  });
+
+  html += `<button class="reset-btn" onclick="resetDia()">↺ Resetar treino de ${diaAtivo}</button>`;
+  el.innerHTML = html;
+}
+
+renderContent();
+</script>
+</body>
+</html>
